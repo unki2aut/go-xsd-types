@@ -214,8 +214,8 @@ func DurationFromString(str string) (*Duration, error) {
 		return nil, err
 	}
 
-	if buf[c] == 'M' && buf[c+1] != '0' {
-		return nil, errNoMonth
+	if err := parsePartial('M', &dur.Years); err != nil {
+		return nil, err
 	}
 
 	if err := parsePartial('Y', &dur.Years); err != nil {
@@ -261,6 +261,44 @@ func lookupInt(buf *[]byte, i int) int {
 	}
 
 	return i
+}
+
+func (d *Duration) ToNanoseconds() (int64, error) {
+	var (
+		msec = int64(1000000)
+		sec  = 1000 * msec
+		hour = 3600 * sec
+		day  = 24 * hour
+		year = 365 * day
+	)
+
+	if d.Months > 0 {
+		return 0, errNoMonth
+	}
+
+	var dur = int64(d.Nanoseconds)
+
+	dur += d.Seconds * sec
+	dur += d.Minutes * 60 * sec
+	dur += d.Hours * hour
+	dur += d.Days * day
+	dur += d.Years * year
+
+	if d.Negative {
+		dur *= -1
+	}
+
+	return dur, nil
+}
+
+func (d *Duration) ToSeconds() (float64, error) {
+	nsec, err := d.ToNanoseconds()
+
+	if err != nil {
+		return 0, err
+	}
+
+	return float64(nsec) / 1e9, nil
 }
 
 func (d *Duration) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
