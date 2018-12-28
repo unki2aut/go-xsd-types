@@ -75,6 +75,10 @@ func (d Duration) String() string {
 		w = fmtInt(buf[:w], d.Years)
 	}
 
+	if w == len(buf) {
+		return "PT0S"
+	}
+
 	w--
 	buf[w] = 'P'
 

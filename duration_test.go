@@ -16,6 +16,7 @@ var (
 )
 
 func TestDuration_String(t *testing.T) {
+	assert.Equal(t, "PT0S", Duration{Seconds: 0}.String())
 	assert.Equal(t, "PT1S", Duration{Seconds: 1}.String())
 	assert.Equal(t, "PT0.11S", Duration{Nanoseconds: 110 * msec}.String())
 	assert.Equal(t, "PT1M", Duration{Minutes: 1}.String())
