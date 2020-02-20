@@ -10,6 +10,7 @@ type DateTime time.Time
 const (
 	DateTimeFormat     = "2006-01-02T15:04:05.999999999-07:00"
 	DateTimeNoTimezone = "2006-01-02T15:04:05.999999999"
+	DateTimeUTC        = "2006-01-02T15:04:05.999999999Z"
 )
 
 func DateTimeFromString(str string) (*DateTime, error) {
@@ -17,10 +18,13 @@ func DateTimeFromString(str string) (*DateTime, error) {
 		val time.Time
 		err error
 		z   = str[len(str)-6]
+		utc = str[len(str)-1]
 	)
 
 	if z == '+' || z == '-' {
 		val, err = time.Parse(DateTimeFormat, str)
+	} else if utc == 'Z' {
+		val, err = time.Parse(DateTimeUTC, str)
 	} else {
 		val, err = time.Parse(DateTimeNoTimezone, str)
 	}

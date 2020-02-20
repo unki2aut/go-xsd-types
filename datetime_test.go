@@ -26,7 +26,8 @@ func TestDateTime(t *testing.T) {
 	assert.Equal(t, "2015-09-07T05:45:54", val.String())
 
 	val, err = DateTimeFromString("2015-09-07T05:45:54Z")
-	assert.NotNil(t, err)
+	assert.Nil(t, err)
+	assert.Equal(t, "2015-09-07T05:45:54", val.String())
 }
 
 type DateTimeAttr struct {
