@@ -23,7 +23,7 @@ func TestDateTime(t *testing.T) {
 
 	val, err = DateTimeFromString("2015-09-07T05:45:54")
 	assert.Nil(t, err)
-	assert.Equal(t, "2015-09-07T05:45:54+00:00", val.String())
+	assert.Equal(t, "2015-09-07T05:45:54", val.String())
 
 	val, err = DateTimeFromString("2015-09-07T05:45:54Z")
 	assert.NotNil(t, err)
@@ -38,7 +38,7 @@ func TestDateTime_UnmarshalXMLAttr(t *testing.T) {
 	err := xml.Unmarshal([]byte(`<foo dateTime="2015-09-07T05:45:54+00:00"></foo>`), &dta)
 	assert.Nil(t, err)
 	assert.NotNil(t, dta.DateTime)
-	assert.Equal(t, "2015-09-07T05:45:54+00:00", (*dta.DateTime).String())
+	assert.Equal(t, "2015-09-07T05:45:54", (*dta.DateTime).String())
 }
 
 func TestDateTime_MarshalXMLAttr(t *testing.T) {
@@ -51,7 +51,7 @@ func TestDateTime_MarshalXMLAttr(t *testing.T) {
 	err = e.Encode(dur)
 
 	assert.Nil(t, err)
-	assert.Equal(t, `<DateTimeAttr dateTime="2015-09-07T05:45:54+00:00"></DateTimeAttr>`, b.String())
+	assert.Equal(t, `<DateTimeAttr dateTime="2015-09-07T05:45:54"></DateTimeAttr>`, b.String())
 }
 
 func BenchmarkDateTimeFromString(b *testing.B) {

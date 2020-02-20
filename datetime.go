@@ -33,7 +33,12 @@ func DateTimeFromString(str string) (*DateTime, error) {
 }
 
 func (dt *DateTime) String() string {
-	return (*time.Time)(dt).Format(DateTimeFormat)
+	_, offset := (*time.Time)(dt).Zone()
+	if offset != 0 {
+		return (*time.Time)(dt).Format(DateTimeFormat)
+	} else {
+		return (*time.Time)(dt).Format(DateTimeNoTimezone)
+	}
 }
 
 func (dt *DateTime) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
